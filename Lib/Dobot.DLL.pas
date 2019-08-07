@@ -5,7 +5,7 @@ interface
 uses
   SysUtils,
 
-  Dobot.DLL.Types;
+  Dobot.Dll.Types;
 
 function DobotExec(): Integer; cdecl; external 'DobotDll.dll';
 function SearchDobot(dobotNameList: PChar; maxLen: LongWord): Integer; cdecl; external 'DobotDll.dll';
