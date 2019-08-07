@@ -33,14 +33,6 @@ function SetHOMEParams(homeParams: PHomeParams; isQueued: LongBool; queuedCmdInd
 function GetHOMEParams(homeParams: PHomeParams): Integer; cdecl; external 'DobotDll.dll';
 function SetHOMECmd(homeCmd: PHomeCmd; isQueued: LongBool; queuedCmdIndex: Puint64): Integer; cdecl; external 'DobotDll.dll';
 
-// Arm orientation
-// extern "C" int SetArmOrientation(ArmOrientation armOrientation, bool isQueued, uint64_t *queuedCmdIndex);
-{ function SetArmOrientation ( armOrientation: PArmOrientation; isQueued: LongBool; queuedCmdIndex: Puint64 ): Integer;
-  cdecl; external 'DobotDll.dll';
-  //extern "C" int GetArmOrientation(ArmOrientation *armOrientation);
-  cdecl; external 'DobotDll.dll';
-}
-
 // EndEffector
 function SetEndEffectorParams(endEffectorParams: PEndEffectorParams; isQueued: LongBool; queuedCmdIndex: Puint64): Integer; cdecl; external 'DobotDll.dll';
 function GetEndEffectorParams(endEffectorParams: PEndEffectorParams): Integer; cdecl; external 'DobotDll.dll';
