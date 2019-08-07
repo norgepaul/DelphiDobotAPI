@@ -25,14 +25,14 @@ type
   );
 
   TDobotMoveType = (
-    mtLinear,
-    mtJoint
+    Linear,
+    Joint
   );
 
   TGripperPosition = (
-    gpOff,
-    gpOpen,
-    gpClosed
+    Off,
+    Open,
+    Close
   );
 
   TDobotPTPMode = (
@@ -42,8 +42,10 @@ type
     JumpAngle,
     MoveJointAngle,
     MoveLinearAngle,
-    MoveJointIncrement,
-    MoveLinearIncrement
+    MoveJointAngleIncrement,
+    MoveLinearXYZIncrement,
+    MoveJointXYZIncrement,
+    JumpMoveXYZ
   );
 
   TDobotAlarm = (
@@ -160,6 +162,30 @@ const
     'Joint 4 Losing Step'
   );
 
+  DobotJogCommandDescriptions: Array[TDobotJogCommand] of String = (
+    'Release',
+    'XAxisPlus',
+    'XAxisMinus',
+    'YAxisPlus',
+    'YAxisMinus',
+    'ZAxisPlus',
+    'ZAxisMinus',
+    'ServoRotateForward',
+    'ServoRotateBackward',
+    'SuctionIn',
+    'SuctionOut',
+    'GripperRotateForward',
+    'GripperRotateBackward',
+    'LaserOn',
+    'LaserOff'
+  );
+
+  DobotMoveTypeDescriptions: Array[TDobotMoveType] of String = (
+    'Linear',
+    'Joint'
+  );
+
+
 procedure DobotAlarmsToStrings(const Value: TDobotAlarms; const Strings: TStrings);
 function DobotAlarmIndexToDobotAlarm(const AlarmIndex: Byte; out DobotAlarm: TDobotAlarm): Boolean;
 function DobotAlarmBytesToDobotAlarms(const AlarmBytes: Array of Byte): TDobotAlarms;
@@ -222,10 +248,3 @@ begin
 end;
 
 end.
-
-
-
-
-
-
-

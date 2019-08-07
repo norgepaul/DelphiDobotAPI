@@ -4,29 +4,81 @@ interface
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls, System.Actions,
   FMX.ActnList, FMX.Controls.Presentation, FMX.Layouts, FMX.Edit,
-  FMX.ListBox, FMX.ScrollBox, FMX.Memo,
+  FMX.ListBox, FMX.ScrollBox, FMX.Memo, FMX.TabControl,
 
   Dobot.Controller,
   Dobot.Classes,
   Dobot.Types,
   Dobot.Utils,
-  Dobot.DLL.Types, FMX.TabControl;
+  Dobot.Dll.Types;
 
 type
   TfrmDobotDemo = class(TForm)
-    Layout1: TLayout;
-    Layout2: TLayout;
     Layout3: TLayout;
     Button1: TButton;
     ActionList1: TActionList;
     Button2: TButton;
+    actHome: TAction;
+    actMoveLinear: TAction;
+    actMoveJoint: TAction;
+    actGripperOff: TAction;
+    actGripperOpen: TAction;
+    actGripperClose: TAction;
+    actSetPoint: TAction;
+    actMoveToPoint: TAction;
+    actConnect: TAction;
+    actDisconnect: TAction;
+    tmrDobot: TTimer;
+    layMain: TLayout;
+    actStop: TAction;
+    edtSerialPort: TEdit;
+    TabControl1: TTabControl;
+    tabManual: TTabItem;
+    tabScript: TTabItem;
+    Layout1: TLayout;
     GroupBox1: TGroupBox;
     Button3: TButton;
+    Button25: TButton;
     GroupBox2: TGroupBox;
+    Layout6: TLayout;
+    cbPTPMode: TComboBox;
+    edtPTPX: TEdit;
+    edtPTPR: TEdit;
+    edtPTPZ: TEdit;
+    edtPTPY: TEdit;
+    Layout7: TLayout;
+    Button4: TButton;
+    Button24: TButton;
+    Layout8: TLayout;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
     GroupBox3: TGroupBox;
+    TabControl2: TTabControl;
+    tabGripper: TTabItem;
+    Button5: TButton;
+    Button8: TButton;
+    Button9: TButton;
+    Sucker: TTabItem;
+    Laser: TTabItem;
     GroupBox4: TGroupBox;
+    Layout5: TLayout;
+    lblJoint1: TLabel;
+    lblJoint4: TLabel;
+    lblJoint3: TLabel;
+    lblJoint2: TLabel;
+    Button6: TButton;
+    Button17: TButton;
+    Button18: TButton;
+    Button19: TButton;
+    Button20: TButton;
+    Button21: TButton;
+    Button22: TButton;
+    Button23: TButton;
     GroupBox5: TGroupBox;
     Layout4: TLayout;
     lblPosX: TLabel;
@@ -41,63 +93,22 @@ type
     Button14: TButton;
     Button15: TButton;
     Button16: TButton;
-    Layout5: TLayout;
-    lblJoint1: TLabel;
-    lblJoint4: TLabel;
-    lblJoint3: TLabel;
-    lblJoint2: TLabel;
-    Button6: TButton;
-    Button17: TButton;
-    Button18: TButton;
-    Button19: TButton;
-    Button20: TButton;
-    Button21: TButton;
-    Button22: TButton;
-    Button23: TButton;
-    Layout6: TLayout;
-    Layout7: TLayout;
-    Button4: TButton;
-    cbPTPMode: TComboBox;
-    Layout8: TLayout;
-    edtPTPX: TEdit;
-    edtPTPR: TEdit;
-    edtPTPZ: TEdit;
-    edtPTPY: TEdit;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    Label8: TLabel;
-    Button24: TButton;
-    actHome: TAction;
-    actMoveLinear: TAction;
-    actMoveJoint: TAction;
-    actGripperOff: TAction;
-    actGripperOpen: TAction;
-    actGripperClose: TAction;
-    actSetPoint: TAction;
-    actMoveToPoint: TAction;
-    actConnect: TAction;
-    actDisconnect: TAction;
+    Layout2: TLayout;
     Layout9: TLayout;
     Label9: TLabel;
     memAlarms: TMemo;
-    Splitter1: TSplitter;
     Layout10: TLayout;
     Label10: TLabel;
     memLog: TMemo;
-    tmrDobot: TTimer;
-    layMain: TLayout;
-    Button25: TButton;
-    actStop: TAction;
-    TabControl1: TTabControl;
-    tabGripper: TTabItem;
-    Button5: TButton;
-    Button8: TButton;
-    Button9: TButton;
-    Sucker: TTabItem;
-    Laser: TTabItem;
-    edtSerialPort: TEdit;
+    Splitter1: TSplitter;
+    GroupBox6: TGroupBox;
     Button26: TButton;
+    Button27: TButton;
+    actScriptStart: TAction;
+    actScriptStop: TAction;
+    ListBox1: TListBox;
+    memScript: TMemo;
+    Splitter2: TSplitter;
     procedure actDisconnectExecute(Sender: TObject);
     procedure actConnectExecute(Sender: TObject);
     procedure actHomeExecute(Sender: TObject);
@@ -110,7 +121,6 @@ type
     procedure OnMoveLinearClick(Sender: TObject);
     procedure OnMoveJointClick(Sender: TObject);
     procedure actStopExecute(Sender: TObject);
-    procedure Button26Click(Sender: TObject);
   private
     FDobotController: TDobotController;
     FPose: TPose;
@@ -170,17 +180,17 @@ end;
 
 procedure TfrmDobotDemo.actGripperCloseExecute(Sender: TObject);
 begin
-  FDobotController.SetGripperPosition(TGripperPosition.gpClosed);
+  FDobotController.SetGripperPosition(TGripperPosition.Close);
 end;
 
 procedure TfrmDobotDemo.actGripperOffExecute(Sender: TObject);
 begin
-  FDobotController.SetGripperPosition(TGripperPosition.gpOff);
+  FDobotController.SetGripperPosition(TGripperPosition.Off);
 end;
 
 procedure TfrmDobotDemo.actGripperOpenExecute(Sender: TObject);
 begin
-  FDobotController.SetGripperPosition(TGripperPosition.gpOpen);
+  FDobotController.SetGripperPosition(TGripperPosition.Open);
 end;
 
 procedure TfrmDobotDemo.actHomeExecute(Sender: TObject);
@@ -203,19 +213,15 @@ begin
   case TDobotPTPMode(cbPTPMode.ItemIndex) of
     MoveJointXYZ,
     MoveJointAngle,
-    MoveJointIncrement:
+    MoveJointAngleIncrement,
+    MoveJointXYZIncrement:
       begin
         edtPTPX.Text := TDobotUtils.FloatToStrUseDot(FPose.jointAngle[0]);
         edtPTPY.Text := TDobotUtils.FloatToStrUseDot(FPose.jointAngle[1]);
         edtPTPZ.Text := TDobotUtils.FloatToStrUseDot(FPose.jointAngle[2]);
         edtPTPR.Text := TDobotUtils.FloatToStrUseDot(FPose.jointAngle[3]);
       end;
-
-    JumpXYZ,
-    JumpAngle,
-    MoveLinearAngle,
-    MoveLinearXYZ,
-    MoveLinearIncrement:
+    else
       begin
         edtPTPX.Text := TDobotUtils.FloatToStrUseDot(FPose.x);
         edtPTPY.Text := TDobotUtils.FloatToStrUseDot(FPose.y);
@@ -230,19 +236,14 @@ begin
   FDobotController.Stop(True);
 end;
 
-procedure TfrmDobotDemo.Button26Click(Sender: TObject);
-begin
-  Label10.Text := FDobotController.GetCurrentCommandIndex.ToString;
-end;
-
 procedure TfrmDobotDemo.OnMoveJointClick(Sender: TObject);
 begin
-  FDobotController.Move(TDobotJogCommand(TButton(Sender).Tag), TDobotMoveType.mtJoint);
+  FDobotController.Move(TDobotJogCommand(TButton(Sender).Tag), TDobotMoveType.Joint);
 end;
 
 procedure TfrmDobotDemo.OnMoveLinearClick(Sender: TObject);
 begin
-  FDobotController.Move(TDobotJogCommand(TButton(Sender).Tag), TDobotMoveType.mtLinear);
+  FDobotController.Move(TDobotJogCommand(TButton(Sender).Tag), TDobotMoveType.Linear);
 end;
 
 constructor TfrmDobotDemo.Create(AOwner: TComponent);

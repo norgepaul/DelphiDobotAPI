@@ -366,11 +366,12 @@
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="..\Lib\Dobot.Types.pas"/>
-        <DCCReference Include="..\Lib\Dobot.DLL.Types.pas"/>
-        <DCCReference Include="..\Lib\Dobot.DLL.pas"/>
+        <DCCReference Include="..\Lib\Dobot.Dll.Types.pas"/>
+        <DCCReference Include="..\Lib\Dobot.Dll.pas"/>
         <DCCReference Include="..\Lib\Dobot.Controller.pas"/>
         <DCCReference Include="..\Lib\Dobot.Classes.pas"/>
         <DCCReference Include="..\Lib\Dobot.Utils.pas"/>
+        <DCCReference Include="..\Lib\Dobot.Script.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -5,11 +5,12 @@ uses
   FMX.Forms,
   frmDobotMain in 'frmDobotMain.pas' {frmDobotDemo},
   Dobot.Types in '..\Lib\Dobot.Types.pas',
-  Dobot.DLL.Types in '..\Lib\Dobot.DLL.Types.pas',
-  Dobot.DLL in '..\Lib\Dobot.DLL.pas',
+  Dobot.Dll.Types in '..\Lib\Dobot.Dll.Types.pas',
+  Dobot.Dll in '..\Lib\Dobot.Dll.pas',
   Dobot.Controller in '..\Lib\Dobot.Controller.pas',
   Dobot.Classes in '..\Lib\Dobot.Classes.pas',
-  Dobot.Utils in '..\Lib\Dobot.Utils.pas';
+  Dobot.Utils in '..\Lib\Dobot.Utils.pas',
+  Dobot.Script in '..\Lib\Dobot.Script.pas';
 
 {$R *.res}
 

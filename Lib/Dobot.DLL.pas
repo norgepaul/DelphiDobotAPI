@@ -1,4 +1,4 @@
-unit Dobot.DLL;
+unit Dobot.Dll;
 
 interface
 

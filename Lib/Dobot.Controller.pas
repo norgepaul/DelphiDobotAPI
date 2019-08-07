@@ -6,8 +6,8 @@ uses
   System.SysUtils, System.Classes,
 
   Dobot.Classes,
-  Dobot.DLL.Types,
-  Dobot.DLL,
+  Dobot.Dll.Types,
+  Dobot.Dll,
   Dobot.Types;
 
 type
@@ -32,37 +32,48 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
+    // --- Control
     procedure Loop; // Call every 100ms
 
+    // --- Connection
     procedure Connect(const SerialPort: String = ''; const BaudRate: Integer = 115200; const Timeout: Integer = 3000);
     procedure Disconnect;
     function Connected: Boolean;
 
-    procedure SetCoordinateJOGParameters(const Velocity, Acceleration: Single);
-    procedure SetJointJOGParameters(const Velocity, Acceleration: Single);
-    procedure SetPTPJointParameters(const Velocity, Acceleration: Single);
-    procedure SetJogCommonParameters(const VelocityRatio, AccelerationRatio: Single);
-    procedure SetPTPCommonParameters(const VelocityRatio, AccelerationRatio: Single);
-    procedure SetPTPJumpParameters(const jumpHeight, zLimit: Single);
-    procedure SetPTPCoordinateParameters(const xyzVelocity, rVelocity, xyzAcceleration, rAcceleration: Single);
+    // --- Misc
+    procedure Exec;
+
+    // --- Settings
+    procedure SetCoordinateJOGParameters(const Velocity, Acceleration: Single; const Queued: Boolean = False);
+    procedure SetJointJOGParameters(const Velocity, Acceleration: Single; const Queued: Boolean = False);
+    procedure SetPTPJointParameters(const Velocity, Acceleration: Single; const Queued: Boolean = False);
+    procedure SetJogCommonParameters(const VelocityRatio, AccelerationRatio: Single; const Queued: Boolean = False);
+    procedure SetPTPCommonParameters(const VelocityRatio, AccelerationRatio: Single; const Queued: Boolean = False);
+    procedure SetPTPJumpParameters(const jumpHeight, zLimit: Single; const Queued: Boolean = False);
+    procedure SetPTPCoordinateParameters(const xyzVelocity, rVelocity, xyzAcceleration, rAcceleration: Single; const Queued: Boolean = False);
     procedure SetCommandTimeout(const Value: Integer);
     procedure SetQueuedCmdClear;
     procedure SetQueuedCmdStartExec;
+
+    // --- States
     procedure GetDeviceVersion(out Major, Minor, Rev: Byte);
     procedure GetPose(out Pose: TPose);
     procedure GetAlarmState(out AlarmState: TArray<Byte>);
     function GetAlarms: TDobotAlarms;
     function GetCurrentCommandIndex: UInt64;
 
-    procedure Exec;
-    procedure Home;
+    // --- Actions
+    procedure Home(const Queued: Boolean = False);
     procedure Stop(const Force: Boolean);
 
-    procedure SetPTP(const Mode: TDobotPTPMode; const X, Y, Z, R: Single);
+    // --- Move
+    procedure Move(const Command: TDobotJogCommand; const MoveType: TDobotMoveType; const MoveForMS: Cardinal = 100; const Queued: Boolean = False);
 
-    procedure SetGripperPosition(const GripperPosition: TGripperPosition);
+    // --- Point to Point
+    procedure SetPTP(const Mode: TDobotPTPMode; const X, Y, Z, R: Single; const Queued: Boolean = False);
 
-    procedure Move(const Command: TDobotJogCommand; const MoveType: TDobotMoveType; const MoveForMS: Cardinal = 100);
+    // --- EndExtenders
+    procedure SetGripperPosition(const GripperPosition: TGripperPosition; const Queued: Boolean = False);
   published
     property OnLog: TOnLog read FOnLog write FOnLog;
   end;
@@ -84,7 +95,7 @@ begin
   end;
 end;
 
-procedure TDobotController.SetJointJOGParameters(const Velocity, Acceleration: Single);
+procedure TDobotController.SetJointJOGParameters(const Velocity, Acceleration: Single; const Queued: Boolean);
 var
   i: Integer;
   jointJOGParams: TJOGJointParams;
@@ -95,12 +106,12 @@ begin
     jointJOGParams.acceleration[i] := Acceleration;
   end;
 
-  CheckResult(Dobot.DLL.SetJOGJointParams(@jointJOGParams, false, @FCmdIndex));
+  CheckResult(Dobot.DLL.SetJOGJointParams(@jointJOGParams, Queued, @FCmdIndex));
 
   DoLog('Joint jog parameters set', TDobotLogLevel.Debug1);
 end;
 
-procedure TDobotController.SetCoordinateJOGParameters(const Velocity, Acceleration: Single);
+procedure TDobotController.SetCoordinateJOGParameters(const Velocity, Acceleration: Single; const Queued: Boolean);
 var
   i: Integer;
   coordinateJOGParams: TJOGcoordinateParams;
@@ -111,21 +122,33 @@ begin
     coordinateJOGParams.acceleration[i] := Acceleration;
   end;
 
-  CheckResult(Dobot.DLL.SetJOGCoordinateParams(@coordinateJOGParams, false, @FCmdIndex));
+  CheckResult(Dobot.DLL.SetJOGCoordinateParams(@coordinateJOGParams, Queued, @FCmdIndex));
 
   DoLog('Coordinate jog parameters set', TDobotLogLevel.Debug1);
 end;
 
-procedure TDobotController.SetGripperPosition(const GripperPosition: TGripperPosition);
+procedure TDobotController.SetGripperPosition(const GripperPosition: TGripperPosition; const Queued: Boolean);
 begin
   case GripperPosition of
-    gpOff: CheckResult(Dobot.DLL.SetEndEffectorGripper(False, False, False, @FCmdIndex));
-    gpOpen: CheckResult(Dobot.DLL.SetEndEffectorGripper(True, False, False, @FCmdIndex));
-    gpClosed: CheckResult(Dobot.DLL.SetEndEffectorGripper(True, True, False, @FCmdIndex));
+    Off:
+      begin
+        CheckResult(Dobot.DLL.SetEndEffectorGripper(False, False, Queued, @FCmdIndex));
+        DoLog('Gripper Off', TDobotLogLevel.Debug1);
+      end;
+    Open:
+      begin
+        CheckResult(Dobot.DLL.SetEndEffectorGripper(True, False, Queued, @FCmdIndex));
+        DoLog('Gripper Open', TDobotLogLevel.Debug1);
+      end;
+    Close:
+      begin
+        CheckResult(Dobot.DLL.SetEndEffectorGripper(True, True, Queued, @FCmdIndex));
+        DoLog('Gripper Close', TDobotLogLevel.Debug1);
+      end;
   end;
 end;
 
-procedure TDobotController.SetPTPJointParameters(const Velocity, Acceleration: Single);
+procedure TDobotController.SetPTPJointParameters(const Velocity, Acceleration: Single; const Queued: Boolean);
 var
   i: Integer;
   ptpJointParams: TptpJointParams;
@@ -136,24 +159,24 @@ begin
     ptpJointParams.acceleration[i] := Acceleration;
   end;
 
-  CheckResult(Dobot.DLL.SetPTPJointParams(@ptpJointParams, false, @FCmdIndex));
+  CheckResult(Dobot.DLL.SetPTPJointParams(@ptpJointParams, Queued, @FCmdIndex));
 
   DoLog('PTP joint parameters set', TDobotLogLevel.Debug1);
 end;
 
-procedure TDobotController.SetJogCommonParameters(const VelocityRatio, AccelerationRatio: Single);
+procedure TDobotController.SetJogCommonParameters(const VelocityRatio, AccelerationRatio: Single; const Queued: Boolean);
 var
   jogcommonParams: TJOGCommonParams;
 begin
   jogcommonParams.velocityRatio := VelocityRatio;
   jogcommonParams.accelerationRatio := AccelerationRatio;
 
-  CheckResult(Dobot.DLL.SetJOGCommonParams(@jogcommonParams, false, @FCmdIndex));
+  CheckResult(Dobot.DLL.SetJOGCommonParams(@jogcommonParams, Queued, @FCmdIndex));
 
   DoLog('Jog common parameters set', TDobotLogLevel.Debug1);
 end;
 
-procedure TDobotController.SetPTP(const Mode: TDobotPTPMode; const X, Y, Z, R: Single);
+procedure TDobotController.SetPTP(const Mode: TDobotPTPMode; const X, Y, Z, R: Single; const Queued: Boolean);
 var
   PTPCmd: TPTPCmd;
 begin
@@ -164,22 +187,24 @@ begin
   PTPCmd.z := Z;
   PTPCmd.r := R;
 
-  CheckResult(Dobot.DLL.SetPTPCmd(@PTPCmd, false, @FCmdIndex));
+  CheckResult(Dobot.DLL.SetPTPCmd(@PTPCmd, Queued, @FCmdIndex));
+
+  DoLog(format('PTP - X=%5.8f, Y=%5.8f, Z=%5.8f, R=%5.8f', [X, Y, Z, R]), TDobotLogLevel.Debug1);
 end;
 
-procedure TDobotController.SetPTPCommonParameters(const VelocityRatio, AccelerationRatio: Single);
+procedure TDobotController.SetPTPCommonParameters(const VelocityRatio, AccelerationRatio: Single; const Queued: Boolean);
 var
   ptpCommonParams: TptpCommonParams;
 begin
   ptpCommonParams.velocityRatio := VelocityRatio;
   ptpCommonParams.accelerationRatio := AccelerationRatio;
 
-  CheckResult(Dobot.DLL.SetPTPCommonParams(@ptpCommonParams, false, @FCmdIndex));
+  CheckResult(Dobot.DLL.SetPTPCommonParams(@ptpCommonParams, Queued, @FCmdIndex));
 
   DoLog('PTP common parameters set', TDobotLogLevel.Debug1);
 end;
 
-procedure TDobotController.SetPTPCoordinateParameters(const xyzVelocity, rVelocity, xyzAcceleration, rAcceleration: Single);
+procedure TDobotController.SetPTPCoordinateParameters(const xyzVelocity, rVelocity, xyzAcceleration, rAcceleration: Single; const Queued: Boolean);
 var
   ptpCoordinateParams: TptpCoordinateParams;
 begin
@@ -188,19 +213,19 @@ begin
   ptpCoordinateParams.xyzAcceleration := xyzAcceleration;
   ptpCoordinateParams.rAcceleration := rAcceleration;
 
-  CheckResult(Dobot.DLL.SetPTPCoordinateParams(@ptpCoordinateParams, false, @FCmdIndex));
+  CheckResult(Dobot.DLL.SetPTPCoordinateParams(@ptpCoordinateParams, Queued, @FCmdIndex));
 
   DoLog('PTP coordinate parameters set', TDobotLogLevel.Debug1);
 end;
 
-procedure TDobotController.SetPTPJumpParameters(const jumpHeight, zLimit: Single);
+procedure TDobotController.SetPTPJumpParameters(const jumpHeight, zLimit: Single; const Queued: Boolean);
 var
   ptpJumpParams: TptpJumpParams;
 begin
   ptpJumpParams.jumpHeight := jumpHeight;
   ptpJumpParams.zLimit := zLimit;
 
-  CheckResult(Dobot.DLL.SetPTPJumpParams(@ptpJumpParams, false, @FCmdIndex));
+  CheckResult(Dobot.DLL.SetPTPJumpParams(@ptpJumpParams, Queued, @FCmdIndex));
 
   DoLog('PTP jump parameters set', TDobotLogLevel.Debug1);
 end;
@@ -231,10 +256,14 @@ begin
   if Force then
   begin
     CheckResult(Dobot.DLL.SetQueuedCmdForceStopExec);
+
+    DoLog('Force Stop', TDobotLogLevel.Debug1);
   end
   else
   begin
     CheckResult(Dobot.DLL.SetQueuedCmdStopExec);
+
+    DoLog('Stop', TDobotLogLevel.Debug1);
   end;
 end;
 
@@ -263,6 +292,8 @@ var
   HomeCmd:THomeCmd;
 begin
   CheckResult(Dobot.DLL.SetHOMECmd(@HomeCmd, false, @FCmdIndex));
+
+  DoLog('Home', TDobotLogLevel.Debug1);
 end;
 
 procedure TDobotController.Loop;
@@ -281,14 +312,15 @@ begin
   end;
 end;
 
-procedure TDobotController.Move(const Command: TDobotJogCommand; const MoveType: TDobotMoveType; const MoveForMS: Cardinal);
+procedure TDobotController.Move(const Command: TDobotJogCommand; const MoveType: TDobotMoveType;
+  const MoveForMS: Cardinal = 100; const Queued: Boolean = False);
 var
   JOGCmd: TJOGCmd;
 begin
   JOGCmd.cmd := Byte(Command);
   JOGCmd.isJoint := Byte(MoveType);
 
-  CheckResult(Dobot.DLL.SetJOGCmd(@JOGCmd, false, @FCmdIndex));
+  CheckResult(Dobot.DLL.SetJOGCmd(@JOGCmd, Queued, @FCmdIndex));
 
   FNextTimerTicks := 0;
 
@@ -296,6 +328,8 @@ begin
   begin
     FNextTimerTicks := TThread.GetTickCount + MoveForMS;
   end;
+
+  DoLog(format('%s move type %s for %dms', [DobotMoveTypeDescriptions[MoveType], DobotJogCommandDescriptions[Command], MoveForMS]), TDobotLogLevel.Debug1);
 end;
 
 function TDobotController.GetAlarms: TDobotAlarms;
@@ -305,6 +339,8 @@ begin
   GetAlarmState(Bytes);
 
   Result := DobotAlarmBytesToDobotAlarms(Bytes);
+
+  DoLog('Get Alarms', TDobotLogLevel.Debug3);
 end;
 
 procedure TDobotController.GetAlarmState(out AlarmState: TArray<Byte>);
@@ -352,6 +388,8 @@ begin
   SetQueuedCmdStartExec;
 
   FConnected := True;
+
+  DoLog('Connected', TDobotLogLevel.Debug1);
 end;
 
 function TDobotController.Connected: Boolean;
@@ -388,7 +426,7 @@ end;
 
 procedure TDobotController.DoOnTimer;
 begin
-  Move(TDobotJogCommand.Release, TDobotMoveType.mtLinear, 0);
+  Move(TDobotJogCommand.Release, TDobotMoveType.Linear, 0);
 end;
 
 procedure TDobotController.Exec;
