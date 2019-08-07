@@ -1,2 +1,3 @@
-# DelphiDobotAPI
- A Delphi wrapper for the Dobot Magician API
+# Delphi Dobot API
+ 
+A Delphi wrapper for the Dobot Magician API.
