@@ -1,0 +1,50 @@
+package DobotAPI_R;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'Dobot Library'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  xmlrtl,
+  vcl,
+  dbrtl,
+  soaprtl,
+  inet,
+  RESTComponents,
+  PTLib_Common_R;
+
+contains
+  Dobot.Controller in '..\Lib\Dobot.Controller.pas',
+  Dobot.DLL.Types in '..\Lib\Dobot.DLL.Types.pas',
+  Dobot.DLL in '..\Lib\Dobot.DLL.pas',
+  Dobot.Classes in '..\Lib\Dobot.Classes.pas',
+  Dobot.Types in '..\Lib\Dobot.Types.pas',
+  Dobot.Utils in '..\Lib\Dobot.Utils.pas';
+
+end.

@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{8914DFB0-5F9E-4622-9B88-E0A4AC157D4B}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Demo\DobotDemo.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Packages\DobotAPI_R.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="DobotDemo">
+        <MSBuild Projects="Demo\DobotDemo.dproj"/>
+    </Target>
+    <Target Name="DobotDemo:Clean">
+        <MSBuild Projects="Demo\DobotDemo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DobotDemo:Make">
+        <MSBuild Projects="Demo\DobotDemo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DobotAPI_R">
+        <MSBuild Projects="Packages\DobotAPI_R.dproj"/>
+    </Target>
+    <Target Name="DobotAPI_R:Clean">
+        <MSBuild Projects="Packages\DobotAPI_R.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DobotAPI_R:Make">
+        <MSBuild Projects="Packages\DobotAPI_R.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="DobotDemo;DobotAPI_R"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="DobotDemo:Clean;DobotAPI_R:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="DobotDemo:Make;DobotAPI_R:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
