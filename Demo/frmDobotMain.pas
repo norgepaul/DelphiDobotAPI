@@ -109,6 +109,7 @@ type
     ListBox1: TListBox;
     memScript: TMemo;
     Splitter2: TSplitter;
+    lblMoving: TLabel;
     procedure actDisconnectExecute(Sender: TObject);
     procedure actConnectExecute(Sender: TObject);
     procedure actHomeExecute(Sender: TObject);
@@ -137,6 +138,10 @@ var
   frmDobotDemo: TfrmDobotDemo;
 
 implementation
+
+resourcestring
+  StrStationary = 'Stationary';
+  StrMoving = 'Moving';
 
 {$R *.fmx}
 
@@ -294,6 +299,15 @@ begin
   lblJoint2.Text := 'J2 = ' + formatfloat('0.000000', FPose.jointAngle[1]);
   lblJoint3.Text := 'J3 = ' + formatfloat('0.000000', FPose.jointAngle[2]);
   lblJoint4.Text := 'J4 = ' + formatfloat('0.000000', FPose.jointAngle[3]);
+
+  if FDobotController.GetAxisMovements = [] then
+  begin
+    lblMoving.Text := StrStationary;
+  end
+  else
+  begin
+    lblMoving.Text := StrMoving + ' - ' + DobotAxisMovementsToString(FDobotController.GetAxisMovements);
+  end;
 end;
 
 end.

@@ -74,7 +74,7 @@ object frmDobotDemo: TfrmDobotDemo
       Size.Width = 677.000000000000000000
       Size.Height = 678.000000000000000000
       Size.PlatformDefault = False
-      TabIndex = 1
+      TabIndex = 0
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -86,13 +86,15 @@ object frmDobotDemo: TfrmDobotDemo
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 60.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = ''
         TabOrder = 0
         Text = 'Manual'
+        ExplicitSize.cx = 60.000000000000000000
+        ExplicitSize.cy = 26.000000000000000000
         object Layout1: TLayout
           Align = Client
           Size.Width = 677.000000000000000000
@@ -141,6 +143,18 @@ object frmDobotDemo: TfrmDobotDemo
               Size.Height = 28.000000000000000000
               Size.PlatformDefault = False
               TabOrder = 0
+            end
+            object lblMoving: TLabel
+              Align = Client
+              Margins.Left = 3.000000000000000000
+              Margins.Top = 3.000000000000000000
+              Margins.Right = 3.000000000000000000
+              Margins.Bottom = 3.000000000000000000
+              Size.Width = 449.000000000000000000
+              Size.Height = 28.000000000000000000
+              Size.PlatformDefault = False
+              Text = 'Stationary'
+              TabOrder = 2
             end
           end
           object GroupBox2: TGroupBox
@@ -799,13 +813,15 @@ object frmDobotDemo: TfrmDobotDemo
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 51.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = ''
         TabOrder = 0
         Text = 'Script'
+        ExplicitSize.cx = 51.000000000000000000
+        ExplicitSize.cy = 26.000000000000000000
         object GroupBox6: TGroupBox
           Align = Top
           Padding.Left = 3.000000000000000000

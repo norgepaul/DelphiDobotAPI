@@ -93,6 +93,18 @@ type
     Debug3
   );
 
+  TDobotAxisMovement = (
+    maX,
+    maY,
+    maZ,
+    maServo,
+    maJoint0,
+    maJoint1,
+    maJoint2,
+    maJoint3
+  );
+  TDobotAxisMovements = set of TDobotAxisMovement;
+
 const
   DobotAlarmIndices: Array[TDobotAlarm] of Byte = (
     $00,
@@ -185,12 +197,43 @@ const
     'Joint'
   );
 
+  DobotAxisMovementDescriptions: Array[TDobotAxisMovement] of String = (
+    'X',
+    'Y',
+    'Z',
+    'Servo',
+    'Joint0',
+    'Joint1',
+    'Joint2',
+    'Joint3'
+  );
 
 procedure DobotAlarmsToStrings(const Value: TDobotAlarms; const Strings: TStrings);
 function DobotAlarmIndexToDobotAlarm(const AlarmIndex: Byte; out DobotAlarm: TDobotAlarm): Boolean;
 function DobotAlarmBytesToDobotAlarms(const AlarmBytes: Array of Byte): TDobotAlarms;
+function DobotAxisMovementsToString(const Value: TDobotAxisMovements): String;
 
 implementation
+
+function DobotAxisMovementsToString(const Value: TDobotAxisMovements): String;
+var
+  am: TDobotAxisMovement;
+begin
+  Result := '';
+
+  for am := Low(TDobotAxisMovement) to High(TDobotAxisMovement) do
+  begin
+    if am in Value then
+    begin
+      if Result <> '' then
+      begin
+        Result := Result + ',';
+      end;
+
+      Result := Result + DobotAxisMovementDescriptions[am];
+    end;
+  end;
+end;
 
 procedure DobotAlarmsToStrings(const Value: TDobotAlarms; const Strings: TStrings);
 var
