@@ -10,7 +10,8 @@ uses
   Dobot.Controller in '..\Lib\Dobot.Controller.pas',
   Dobot.Classes in '..\Lib\Dobot.Classes.pas',
   Dobot.Utils in '..\Lib\Dobot.Utils.pas',
-  Dobot.Script in '..\Lib\Dobot.Script.pas';
+  Dobot.Script in '..\Lib\Dobot.Script.pas',
+  Dobot.Interfaces in '..\Lib\Dobot.Interfaces.pas';
 
 {$R *.res}
 

@@ -10,6 +10,7 @@ uses
   FMX.ListBox, FMX.ScrollBox, FMX.Memo, FMX.TabControl,
 
   Dobot.Controller,
+  Dobot.Script,
   Dobot.Classes,
   Dobot.Types,
   Dobot.Utils,
@@ -101,15 +102,35 @@ type
     Label10: TLabel;
     memLog: TMemo;
     Splitter1: TSplitter;
-    GroupBox6: TGroupBox;
-    Button26: TButton;
-    Button27: TButton;
     actScriptStart: TAction;
     actScriptStop: TAction;
-    ListBox1: TListBox;
     memScript: TMemo;
-    Splitter2: TSplitter;
     lblMoving: TLabel;
+    GroupBox6: TGroupBox;
+    Layout11: TLayout;
+    cbScriptPTPMode: TComboBox;
+    edtScriptX: TEdit;
+    edtScriptR: TEdit;
+    edtScriptZ: TEdit;
+    edtScriptY: TEdit;
+    Layout12: TLayout;
+    Layout13: TLayout;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Button27: TButton;
+    actScriptAddMove: TAction;
+    actScriptHome: TAction;
+    Button26: TButton;
+    actScriptSessionHome: TAction;
+    actScriptWaitUntilIdle: TAction;
+    Button29: TButton;
+    Button30: TButton;
+    Button28: TButton;
+    actScriptExecQueue: TAction;
+    Button31: TButton;
+    Button32: TButton;
     procedure actDisconnectExecute(Sender: TObject);
     procedure actConnectExecute(Sender: TObject);
     procedure actHomeExecute(Sender: TObject);
@@ -122,13 +143,23 @@ type
     procedure OnMoveLinearClick(Sender: TObject);
     procedure OnMoveJointClick(Sender: TObject);
     procedure actStopExecute(Sender: TObject);
+    procedure actScriptAddMoveExecute(Sender: TObject);
+    procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+    procedure actScriptHomeExecute(Sender: TObject);
+    procedure actScriptSessionHomeExecute(Sender: TObject);
+    procedure actScriptWaitUntilIdleExecute(Sender: TObject);
+    procedure actScriptExecQueueExecute(Sender: TObject);
+    procedure actScriptStartExecute(Sender: TObject);
+    procedure actScriptStopExecute(Sender: TObject);
   private
-    FDobotController: TDobotController;
+    FDobotController: TDobotScript;
+
     FPose: TPose;
     FDobotAlarms: TStringList;
     procedure UpdateDobotAlarms;
     procedure UpdateDobotPose;
     procedure OnLog(Sender: TObject; const LogText: String; const LogLevel: TDobotLogLevel);
+    procedure AddScriptLine(const Text: String);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -140,7 +171,7 @@ var
 implementation
 
 resourcestring
-  StrStationary = 'Stationary';
+  StrStationary = 'Stationary - Command ID: %d';
   StrMoving = 'Moving';
 
 {$R *.fmx}
@@ -203,6 +234,20 @@ begin
   FDobotController.Home;
 end;
 
+procedure TfrmDobotDemo.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+begin
+  actScriptAddMove.Enabled :=
+    (edtScriptX.Text <> '') and
+    (edtScriptY.Text <> '') and
+    (edtScriptZ.Text <> '') and
+    (edtScriptR.Text <> '');
+
+  actScriptStart.Enabled := not FDobotController.ScriptActive;
+  actScriptStop.Enabled := FDobotController.ScriptActive;
+
+  Handled := True;
+end;
+
 procedure TfrmDobotDemo.actMoveToPointExecute(Sender: TObject);
 begin
   FDobotController.SetPTP(
@@ -211,6 +256,50 @@ begin
     TDobotUtils.StrToFloatDefUseDot(edtPTPY.Text, 0),
     TDobotUtils.StrToFloatDefUseDot(edtPTPZ.Text, 0),
     TDobotUtils.StrToFloatDefUseDot(edtPTPR.Text, 0));
+end;
+
+procedure TfrmDobotDemo.actScriptAddMoveExecute(Sender: TObject);
+begin
+  AddScriptLine(format('%s \X %s \Y %s \Z %s \R %s', [DobotScriptPTPMode[TDobotPTPMode(cbScriptPTPMode.ItemIndex)], edtScriptX.Text, edtScriptY.Text, edtScriptY.Text, edtScriptY.Text]));
+end;
+
+procedure TfrmDobotDemo.actScriptExecQueueExecute(Sender: TObject);
+begin
+  AddScriptLine('ExecQueue');
+end;
+
+procedure TfrmDobotDemo.actScriptHomeExecute(Sender: TObject);
+begin
+  AddScriptLine('Home');
+end;
+
+procedure TfrmDobotDemo.actScriptSessionHomeExecute(Sender: TObject);
+begin
+  AddScriptLine('Home \Session');
+end;
+
+procedure TfrmDobotDemo.actScriptStartExecute(Sender: TObject);
+begin
+  FDobotController.Text := memScript.Lines;
+  FDobotController.ScriptStart;
+end;
+
+procedure TfrmDobotDemo.actScriptStopExecute(Sender: TObject);
+begin
+  FDobotController.ScriptStop;
+end;
+
+procedure TfrmDobotDemo.actScriptWaitUntilIdleExecute(Sender: TObject);
+begin
+  AddScriptLine('WaitIdle');
+end;
+
+procedure TfrmDobotDemo.AddScriptLine(const Text: String);
+var
+  Line: String;
+begin
+  Line := Text;
+  memScript.Lines.Add(Line);
 end;
 
 procedure TfrmDobotDemo.actSetPointExecute(Sender: TObject);
@@ -248,7 +337,7 @@ end;
 
 procedure TfrmDobotDemo.OnMoveLinearClick(Sender: TObject);
 begin
-  FDobotController.Move(TDobotJogCommand(TButton(Sender).Tag), TDobotMoveType.Linear);
+  FDobotController.Move(TDobotJogCommand(TButton(Sender).Tag), TDobotMoveType.Linear, 100, True);
 end;
 
 constructor TfrmDobotDemo.Create(AOwner: TComponent);
@@ -256,7 +345,7 @@ begin
   inherited;
 
   FDobotAlarms := TStringList.Create;
-  FDobotController := TDobotController.Create(Self);
+  FDobotController := TDobotScript.Create(Self);
   FDobotController.OnLog := OnLog;
 
   layMain.Enabled := False;
@@ -273,8 +362,11 @@ procedure TfrmDobotDemo.tmrDobotTimer(Sender: TObject);
 begin
   FDobotController.Loop;
 
-  UpdateDobotPose;
-  UpdateDobotAlarms;
+  if not FDobotController.ScriptActive then
+  begin
+    UpdateDobotPose;
+    UpdateDobotAlarms;
+  end;
 end;
 
 procedure TfrmDobotDemo.UpdateDobotAlarms;
@@ -288,6 +380,8 @@ begin
 end;
 
 procedure TfrmDobotDemo.UpdateDobotPose;
+var
+  Status: String;
 begin
   FDobotController.GetPose(FPose);
 
@@ -300,14 +394,21 @@ begin
   lblJoint3.Text := 'J3 = ' + formatfloat('0.000000', FPose.jointAngle[2]);
   lblJoint4.Text := 'J4 = ' + formatfloat('0.000000', FPose.jointAngle[3]);
 
-  if FDobotController.GetAxisMovements = [] then
+  edtScriptX.Text := TDobotUtils.FloatToStrUseDot(FPose.x);
+  edtScriptY.Text := TDobotUtils.FloatToStrUseDot(FPose.y);
+  edtScriptZ.Text := TDobotUtils.FloatToStrUseDot(FPose.z);
+  edtScriptR.Text := TDobotUtils.FloatToStrUseDot(FPose.r);
+
+  if not FDobotController.Moving then
   begin
-    lblMoving.Text := StrStationary;
+    Status := format(StrStationary, [FDobotController.GetCurrentCommandIndex]);
   end
   else
   begin
-    lblMoving.Text := StrMoving + ' - ' + DobotAxisMovementsToString(FDobotController.GetAxisMovements);
+    Status := format('Moving - %s - Command ID: %d', [DobotAxisMovementsToString(FDobotController.GetAxisMovements), FDobotController.GetCurrentCommandIndex]);
   end;
+
+  lblMoving.Text := Status;
 end;
 
 end.

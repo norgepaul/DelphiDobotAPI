@@ -3,7 +3,7 @@ unit Dobot.Types;
 interface
 
 uses
-  System.Classes;
+  System.Classes, System.SysUtils;
 
 type
   TDobotJogCommand = (
@@ -104,6 +104,12 @@ type
     maJoint3
   );
   TDobotAxisMovements = set of TDobotAxisMovement;
+
+  TDobotScriptState = (
+    dssIdle,
+    dssWorking,
+    dssWaitingStationary
+  );
 
 const
   DobotAlarmIndices: Array[TDobotAlarm] of Byte = (
@@ -208,12 +214,44 @@ const
     'Joint3'
   );
 
+  DobotScriptPTPMode: Array[TDobotPTPMode] of String = (
+    'JumpXYZ',
+    'MoveJointXYZ',
+    'MoveLinearXYZ',
+    'JumpAngle',
+    'MoveJointAngle',
+    'MoveLinearAngle',
+    'MoveJointAngleIncrement',
+    'MoveLinearXYZIncrement',
+    'MoveJointXYZIncrement',
+    'JumpMoveXYZ'
+  );
+
 procedure DobotAlarmsToStrings(const Value: TDobotAlarms; const Strings: TStrings);
 function DobotAlarmIndexToDobotAlarm(const AlarmIndex: Byte; out DobotAlarm: TDobotAlarm): Boolean;
 function DobotAlarmBytesToDobotAlarms(const AlarmBytes: Array of Byte): TDobotAlarms;
 function DobotAxisMovementsToString(const Value: TDobotAxisMovements): String;
+function DobotScriptPTPModeTextToPTPMode(const Value: String; out PTPMode: TDobotPTPMode): Boolean;
 
 implementation
+
+function DobotScriptPTPModeTextToPTPMode(const Value: String; out PTPMode: TDobotPTPMode): Boolean;
+var
+  i: TDobotPTPMode;
+begin
+  Result := False;
+
+  for i := Low(TDobotPTPMode) to High(TDobotPTPMode) do
+  begin
+    if AnsiSameText(DobotScriptPTPMode[i], Value) then
+    begin
+      PTPMode := i;
+      Result := True;
+
+      Break;
+    end;
+  end;
+end;
 
 function DobotAxisMovementsToString(const Value: TDobotAxisMovements): String;
 var

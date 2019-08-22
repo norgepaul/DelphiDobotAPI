@@ -822,6 +822,33 @@ object frmDobotDemo: TfrmDobotDemo
         Text = 'Script'
         ExplicitSize.cx = 51.000000000000000000
         ExplicitSize.cy = 26.000000000000000000
+        object memScript: TMemo
+          Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+          DataDetectorTypes = []
+          Lines.Strings = (
+            
+              'JumpMoveXYZ \X 138.75927734375 \Y -8.34389686584473 \Z -8.343896' +
+              '86584473 \R -8.34389686584473'
+            'WaitIdle'
+            
+              'JumpMoveXYZ \X 250.146759033203 \Y -18.059814453125 \Z -18.05981' +
+              '4453125 \R -18.059814453125'
+            'WaitIdle'
+            
+              'JumpMoveXYZ \X 138.75927734375 \Y -8.34389686584473 \Z -8.343896' +
+              '86584473 \R -8.34389686584473'
+            'WaitIdle')
+          StyledSettings = [Style, FontColor]
+          TextSettings.Font.Family = 'Consolas'
+          TextSettings.Font.Size = 14.000000000000000000
+          Align = Client
+          Size.Width = 677.000000000000000000
+          Size.Height = 543.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 4
+          Viewport.Width = 673.000000000000000000
+          Viewport.Height = 523.000000000000000000
+        end
         object GroupBox6: TGroupBox
           Align = Top
           Padding.Left = 3.000000000000000000
@@ -829,80 +856,272 @@ object frmDobotDemo: TfrmDobotDemo
           Padding.Right = 3.000000000000000000
           Padding.Bottom = 3.000000000000000000
           Size.Width = 677.000000000000000000
-          Size.Height = 57.000000000000000000
+          Size.Height = 109.000000000000000000
           Size.PlatformDefault = False
-          Text = 'Control'
-          TabOrder = 4
-          object Button26: TButton
-            Action = actScriptStart
-            Align = Left
-            Enabled = True
-            ImageIndex = -1
-            Margins.Left = 3.000000000000000000
-            Margins.Top = 3.000000000000000000
-            Margins.Right = 3.000000000000000000
-            Margins.Bottom = 3.000000000000000000
-            Position.X = 6.000000000000000000
-            Position.Y = 23.000000000000000000
-            Size.Width = 102.000000000000000000
-            Size.Height = 28.000000000000000000
+          Text = 'Point'
+          TabOrder = 3
+          object Layout11: TLayout
+            Align = Top
+            Position.X = 3.000000000000000000
+            Position.Y = 38.000000000000000000
+            Size.Width = 671.000000000000000000
+            Size.Height = 31.000000000000000000
             Size.PlatformDefault = False
-            TabOrder = 1
+            TabOrder = 2
+            object cbScriptPTPMode: TComboBox
+              Align = MostLeft
+              DropDownCount = 20
+              Items.Strings = (
+                'Jump XYZ'
+                'Move Joint XYZ'
+                'Move Linear XYZ'
+                'Jump Angle'
+                'Move Joint Angle'
+                'Move Linear Angle'
+                'Move Joint Angle Increment'
+                'Move Linear XYZ Increment'
+                'Move Joint XYZ Increment,'
+                'Jump Move XYZ')
+              ItemIndex = 0
+              Margins.Left = 3.000000000000000000
+              Margins.Top = 3.000000000000000000
+              Margins.Right = 3.000000000000000000
+              Margins.Bottom = 3.000000000000000000
+              Position.X = 3.000000000000000000
+              Position.Y = 3.000000000000000000
+              Size.Width = 182.000000000000000000
+              Size.Height = 25.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 0
+            end
+            object edtScriptX: TEdit
+              Touch.InteractiveGestures = [LongTap, DoubleTap]
+              Align = Left
+              TabOrder = 4
+              ReadOnly = True
+              Position.X = 191.000000000000000000
+              Position.Y = 3.000000000000000000
+              Margins.Left = 3.000000000000000000
+              Margins.Top = 3.000000000000000000
+              Margins.Right = 3.000000000000000000
+              Margins.Bottom = 3.000000000000000000
+              Size.Width = 92.000000000000000000
+              Size.Height = 25.000000000000000000
+              Size.PlatformDefault = False
+            end
+            object edtScriptR: TEdit
+              Touch.InteractiveGestures = [LongTap, DoubleTap]
+              Align = Left
+              TabOrder = 3
+              ReadOnly = True
+              Position.X = 485.000000000000000000
+              Position.Y = 3.000000000000000000
+              Margins.Left = 3.000000000000000000
+              Margins.Top = 3.000000000000000000
+              Margins.Right = 3.000000000000000000
+              Margins.Bottom = 3.000000000000000000
+              Size.Width = 92.000000000000000000
+              Size.Height = 25.000000000000000000
+              Size.PlatformDefault = False
+            end
+            object edtScriptZ: TEdit
+              Touch.InteractiveGestures = [LongTap, DoubleTap]
+              Align = Left
+              TabOrder = 2
+              ReadOnly = True
+              Position.X = 387.000000000000000000
+              Position.Y = 3.000000000000000000
+              Margins.Left = 3.000000000000000000
+              Margins.Top = 3.000000000000000000
+              Margins.Right = 3.000000000000000000
+              Margins.Bottom = 3.000000000000000000
+              Size.Width = 92.000000000000000000
+              Size.Height = 25.000000000000000000
+              Size.PlatformDefault = False
+            end
+            object edtScriptY: TEdit
+              Touch.InteractiveGestures = [LongTap, DoubleTap]
+              Align = Left
+              TabOrder = 1
+              ReadOnly = True
+              Position.X = 289.000000000000000000
+              Position.Y = 3.000000000000000000
+              Margins.Left = 3.000000000000000000
+              Margins.Top = 3.000000000000000000
+              Margins.Right = 3.000000000000000000
+              Margins.Bottom = 3.000000000000000000
+              Size.Width = 92.000000000000000000
+              Size.Height = 25.000000000000000000
+              Size.PlatformDefault = False
+            end
+            object Button27: TButton
+              Action = actScriptAddMove
+              Align = Left
+              Enabled = True
+              ImageIndex = -1
+              Margins.Left = 3.000000000000000000
+              Margins.Top = 3.000000000000000000
+              Margins.Right = 3.000000000000000000
+              Margins.Bottom = 3.000000000000000000
+              Position.X = 583.000000000000000000
+              Position.Y = 3.000000000000000000
+              Size.Width = 80.000000000000000000
+              Size.Height = 25.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 5
+            end
           end
-          object Button27: TButton
-            Action = actScriptStop
-            Align = Left
-            Enabled = True
-            ImageIndex = -1
-            Margins.Left = 3.000000000000000000
-            Margins.Top = 3.000000000000000000
-            Margins.Right = 3.000000000000000000
-            Margins.Bottom = 3.000000000000000000
-            Position.X = 114.000000000000000000
-            Position.Y = 23.000000000000000000
-            Size.Width = 102.000000000000000000
-            Size.Height = 28.000000000000000000
+          object Layout12: TLayout
+            Align = Top
+            Position.X = 3.000000000000000000
+            Position.Y = 69.000000000000000000
+            Size.Width = 671.000000000000000000
+            Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
+            object Button26: TButton
+              Action = actScriptHome
+              Align = Left
+              Enabled = True
+              ImageIndex = -1
+              Margins.Left = 3.000000000000000000
+              Margins.Top = 3.000000000000000000
+              Margins.Right = 3.000000000000000000
+              Margins.Bottom = 3.000000000000000000
+              Position.X = 3.000000000000000000
+              Position.Y = 3.000000000000000000
+              Size.Width = 93.000000000000000000
+              Size.Height = 26.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 10
+            end
+            object Button29: TButton
+              Action = actScriptWaitUntilIdle
+              Align = Left
+              Enabled = True
+              ImageIndex = -1
+              Margins.Left = 3.000000000000000000
+              Margins.Top = 3.000000000000000000
+              Margins.Right = 3.000000000000000000
+              Margins.Bottom = 3.000000000000000000
+              Position.X = 201.000000000000000000
+              Position.Y = 3.000000000000000000
+              Size.Width = 93.000000000000000000
+              Size.Height = 26.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 9
+            end
+            object Button30: TButton
+              Action = actScriptSessionHome
+              Align = Left
+              Enabled = True
+              ImageIndex = -1
+              Margins.Left = 3.000000000000000000
+              Margins.Top = 3.000000000000000000
+              Margins.Right = 3.000000000000000000
+              Margins.Bottom = 3.000000000000000000
+              Position.X = 102.000000000000000000
+              Position.Y = 3.000000000000000000
+              Size.Width = 93.000000000000000000
+              Size.Height = 26.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 5
+            end
+            object Button28: TButton
+              Action = actScriptExecQueue
+              Align = Left
+              Enabled = True
+              ImageIndex = -1
+              Margins.Left = 3.000000000000000000
+              Margins.Top = 3.000000000000000000
+              Margins.Right = 3.000000000000000000
+              Margins.Bottom = 3.000000000000000000
+              Position.X = 300.000000000000000000
+              Position.Y = 3.000000000000000000
+              Size.Width = 93.000000000000000000
+              Size.Height = 26.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 8
+            end
+            object Button31: TButton
+              Action = actScriptStart
+              Align = Left
+              Enabled = True
+              ImageIndex = -1
+              Margins.Left = 3.000000000000000000
+              Margins.Top = 3.000000000000000000
+              Margins.Right = 3.000000000000000000
+              Margins.Bottom = 3.000000000000000000
+              Position.X = 399.000000000000000000
+              Position.Y = 3.000000000000000000
+              Size.Width = 93.000000000000000000
+              Size.Height = 26.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 7
+            end
+            object Button32: TButton
+              Action = actScriptStop
+              Align = Left
+              Enabled = True
+              ImageIndex = -1
+              Margins.Left = 3.000000000000000000
+              Margins.Top = 3.000000000000000000
+              Margins.Right = 3.000000000000000000
+              Margins.Bottom = 3.000000000000000000
+              Position.X = 498.000000000000000000
+              Position.Y = 3.000000000000000000
+              Size.Width = 93.000000000000000000
+              Size.Height = 26.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 6
+            end
           end
-        end
-        object ListBox1: TListBox
-          Align = Left
-          Position.Y = 57.000000000000000000
-          Size.Width = 153.000000000000000000
-          Size.Height = 595.000000000000000000
-          Size.PlatformDefault = False
-          TabOrder = 5
-          DisableFocusEffect = True
-          DefaultItemStyles.ItemStyle = ''
-          DefaultItemStyles.GroupHeaderStyle = ''
-          DefaultItemStyles.GroupFooterStyle = ''
-          Viewport.Width = 149.000000000000000000
-          Viewport.Height = 591.000000000000000000
-        end
-        object memScript: TMemo
-          Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
-          DataDetectorTypes = []
-          StyledSettings = [Style, FontColor]
-          TextSettings.Font.Family = 'Consolas'
-          TextSettings.Font.Size = 10.000000000000000000
-          Align = Client
-          Size.Width = 521.000000000000000000
-          Size.Height = 595.000000000000000000
-          Size.PlatformDefault = False
-          TabOrder = 6
-          Viewport.Width = 517.000000000000000000
-          Viewport.Height = 591.000000000000000000
-        end
-        object Splitter2: TSplitter
-          Align = Left
-          Cursor = crHSplit
-          MinSize = 20.000000000000000000
-          Position.X = 153.000000000000000000
-          Position.Y = 57.000000000000000000
-          Size.Width = 3.000000000000000000
-          Size.Height = 595.000000000000000000
-          Size.PlatformDefault = False
+          object Layout13: TLayout
+            Align = Top
+            Position.X = 3.000000000000000000
+            Position.Y = 20.000000000000000000
+            Size.Width = 671.000000000000000000
+            Size.Height = 18.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            object Label1: TLabel
+              Align = Left
+              Margins.Left = 192.000000000000000000
+              Position.X = 192.000000000000000000
+              Size.Width = 100.000000000000000000
+              Size.Height = 18.000000000000000000
+              Size.PlatformDefault = False
+              Text = 'X'
+              TabOrder = 3
+            end
+            object Label2: TLabel
+              Align = Left
+              Position.X = 292.000000000000000000
+              Size.Width = 96.000000000000000000
+              Size.Height = 18.000000000000000000
+              Size.PlatformDefault = False
+              Text = 'Y'
+              TabOrder = 2
+            end
+            object Label3: TLabel
+              Align = Left
+              Position.X = 388.000000000000000000
+              Size.Width = 98.000000000000000000
+              Size.Height = 18.000000000000000000
+              Size.PlatformDefault = False
+              Text = 'Z'
+              TabOrder = 1
+            end
+            object Label4: TLabel
+              Align = Left
+              Position.X = 486.000000000000000000
+              Size.Width = 87.000000000000000000
+              Size.Height = 18.000000000000000000
+              Size.PlatformDefault = False
+              Text = 'R'
+              TabOrder = 0
+            end
+          end
         end
       end
     end
@@ -985,6 +1204,7 @@ object frmDobotDemo: TfrmDobotDemo
     Top = 586
   end
   object ActionList1: TActionList
+    OnUpdate = ActionList1Update
     Left = 113
     Top = 585
     object actConnect: TAction
@@ -1042,10 +1262,42 @@ object frmDobotDemo: TfrmDobotDemo
       OnExecute = actStopExecute
     end
     object actScriptStart: TAction
+      Category = 'Script'
       Text = 'Start'
+      OnExecute = actScriptStartExecute
     end
     object actScriptStop: TAction
+      Category = 'Script'
       Text = 'Stop'
+      OnExecute = actScriptStopExecute
+    end
+    object actScriptAddMove: TAction
+      Category = 'Script'
+      Text = 'Add Move'
+      OnExecute = actScriptAddMoveExecute
+    end
+    object actScriptHome: TAction
+      Category = 'Script'
+      Text = 'Home'
+      OnExecute = actScriptHomeExecute
+    end
+    object actScriptSessionHome: TAction
+      Category = 'Script'
+      Text = 'Session Home'
+      OnExecute = actScriptSessionHomeExecute
+    end
+    object actScriptWaitUntilIdle: TAction
+      Category = 'Script'
+      Text = 'Wait until idle'
+      OnExecute = actScriptWaitUntilIdleExecute
+    end
+    object actScriptExecQueue: TAction
+      Category = 'Script'
+      Text = 'Exec Queue'
+      OnExecute = actScriptExecQueueExecute
+    end
+    object TAction
+      Category = 'Script'
     end
   end
 end
