@@ -34,6 +34,7 @@ type
     procedure ProcessPTP(const PTPMode: TDobotPTPMode; const X, Y, Z, R: Single);
   protected
     procedure DoLoop; override;
+    procedure DoDisconnect; override;
 
     procedure DoExecuteLine(const Line: String); virtual;
     procedure DoExecuteScript; virtual;
@@ -77,6 +78,13 @@ end;
 destructor TDobotScript.Destroy;
 begin
   FreeAndNil(FText);
+
+  inherited;
+end;
+
+procedure TDobotScript.DoDisconnect;
+begin
+  ScriptStop;
 
   inherited;
 end;
@@ -201,8 +209,6 @@ end;
 
 procedure TDobotScript.DoLoop;
 begin
-  inherited;
-
   if FActive then
   begin
     try
@@ -215,6 +221,8 @@ begin
         DoDobotScriptOnError(e);
       end;
     end;
+
+    inherited;
   end;
 end;
 

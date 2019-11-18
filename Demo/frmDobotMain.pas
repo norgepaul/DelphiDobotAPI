@@ -261,7 +261,12 @@ end;
 
 procedure TfrmDobotDemo.actScriptAddMoveExecute(Sender: TObject);
 begin
-  AddScriptLine(format('%s \X %s \Y %s \Z %s \R %s', [DobotScriptPTPMode[TDobotPTPMode(cbScriptPTPMode.ItemIndex)], edtScriptX.Text, edtScriptY.Text, edtScriptY.Text, edtScriptY.Text]));
+  AddScriptLine(format('%s \X %s \Y %s \Z %s \R %s', [
+    DobotScriptPTPMode[TDobotPTPMode(cbScriptPTPMode.ItemIndex)],
+    edtScriptX.Text,
+    edtScriptY.Text,
+    edtScriptZ.Text,
+    edtScriptR.Text]));
 end;
 
 procedure TfrmDobotDemo.actScriptExecQueueExecute(Sender: TObject);

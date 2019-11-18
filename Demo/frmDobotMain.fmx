@@ -74,7 +74,7 @@ object frmDobotDemo: TfrmDobotDemo
       Size.Width = 677.000000000000000000
       Size.Height = 678.000000000000000000
       Size.PlatformDefault = False
-      TabIndex = 0
+      TabIndex = 1
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -86,7 +86,7 @@ object frmDobotDemo: TfrmDobotDemo
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 60.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -813,7 +813,7 @@ object frmDobotDemo: TfrmDobotDemo
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 51.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False

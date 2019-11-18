@@ -507,7 +507,11 @@ end;
 
 function TBaseDobotController.DoGetCurrentCommandIndex: UInt64;
 begin
+try
   Dobot.DLL.GetQueuedCmdCurrentIndex(@Result);
+except
+  sleep(1);
+end;
 end;
 
 procedure TBaseDobotController.DoConnect(const SerialPort: String; const BaudRate: Integer; const Timeout: Integer);
@@ -531,7 +535,7 @@ begin
   DoSetPTPJointParameters(200, 200);
   DoSetJogCommonParameters(50, 50);
   DoSetPTPCommonParameters(50, 50);
-  DoSetPTPCoordinateParameters(200, 200, 200, 200);
+  DoSetPTPCoordinateParameters(1000, 1000, 1000, 1000);
   DoSetPTPJumpParameters(10, 20);
 
   DoSetQueuedCmdClear;
