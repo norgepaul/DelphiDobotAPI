@@ -63,6 +63,7 @@ implementation
 
 resourcestring
   StrSyntaxErrorAtLine = 'Syntax Error at line %d - %s';
+  StrDobotAlarmed = 'Dobot alarmed - ';
 
 { TDobotScript }
 
@@ -164,7 +165,7 @@ begin
     try
       DobotAlarmsToStrings(Alarms, AlarmStrings);
 
-      raise EDobotScriptError.Create('Dobot alarmed - ' + AlarmStrings.Text);
+      raise EDobotScriptError.Create(StrDobotAlarmed + AlarmStrings.Text);
     finally
       FreeAndNil(AlarmStrings);
     end;

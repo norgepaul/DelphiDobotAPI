@@ -173,6 +173,7 @@ implementation
 resourcestring
   StrStationary = 'Stationary - Command ID: %d';
   StrMoving = 'Moving';
+  StrMovingSComman = 'Moving - %s - Command ID: %d';
 
 {$R *.fmx}
 
@@ -405,7 +406,7 @@ begin
   end
   else
   begin
-    Status := format('Moving - %s - Command ID: %d', [DobotAxisMovementsToString(FDobotController.GetAxisMovements), FDobotController.GetCurrentCommandIndex]);
+    Status := format(StrMovingSComman, [DobotAxisMovementsToString(FDobotController.GetAxisMovements), FDobotController.GetCurrentCommandIndex]);
   end;
 
   lblMoving.Text := Status;
