@@ -535,7 +535,7 @@ begin
   DoSetPTPJointParameters(200, 200);
   DoSetJogCommonParameters(50, 50);
   DoSetPTPCommonParameters(50, 50);
-  DoSetPTPCoordinateParameters(1000, 1000, 1000, 1000);
+  DoSetPTPCoordinateParameters(200, 200, 200, 200);
   DoSetPTPJumpParameters(10, 20);
 
   DoSetQueuedCmdClear;
